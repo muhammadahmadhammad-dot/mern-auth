@@ -1,8 +1,11 @@
 import User from "../model/userModel.js";
-
+import bycrypt from "bcryptjs"
 export async function register(req, res) {
   try {
-    const data = new User(req.body);
+    const {fname,lname, email, password} = req.body;
+    const hash = await bycrypt.hash(password,10)
+
+    const data = new User({fname,lname, email, password:hash});
     const user = await data.save();
     return res
       .status(201)
@@ -19,7 +22,8 @@ export async function login(req, res) {
     if (!user) {
       return res.status(400).json({ error: "Invalid Credentials." });
     }
-    if (password != user.password) {
+    const hash = await bycrypt.compare(password, user.password)
+    if (hash) {
       return res.status(400).json({ error: "Invalid Credentials." });
     }
     return res.status(200).json({ msg: "Login Successfully" });
