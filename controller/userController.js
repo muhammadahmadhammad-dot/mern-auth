@@ -1,5 +1,7 @@
 import User from "../model/userModel.js";
 import bycrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
+
 export async function register(req, res) {
   try {
     const {fname,lname, email, password} = req.body;
@@ -23,10 +25,12 @@ export async function login(req, res) {
       return res.status(400).json({ error: "Invalid Credentials." });
     }
     const hash = await bycrypt.compare(password, user.password)
-    if (hash) {
+    if (!hash) {
       return res.status(400).json({ error: "Invalid Credentials." });
     }
-    return res.status(200).json({ msg: "Login Successfully" });
+    const token = jwt.sign({email:email}, process.env.JWT_SECRET, {expiresIn:'1d'});
+    // { httpOnly: true } ensures that the cookie cannot be accessed via JavaScript on the client side. This enhances security by preventing Cross-Site Scripting (XSS) attacks from stealing the token.
+    return res.status(200).cookie("token",token,  { httpOnly: true }).json({ msg: "Login Successfully",token });
   } catch (error) {
     return res.status(500).json({ error: `error : ${error}` });
   }
