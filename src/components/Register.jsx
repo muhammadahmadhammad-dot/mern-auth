@@ -34,13 +34,15 @@ const Register = () => {
         },
         body:JSON.stringify(data),
       });
-      
+
+      const res = await sendingRequest.json();
+      console.log(res);
+
       if (!sendingRequest.ok) {
         toast.error("Something please try again")
         return;
       }
 
-      console.log(sendingRequest)
       toast.success('Register Successfully.')
       navigate('/login')
 
@@ -129,6 +131,9 @@ const Register = () => {
             onChange={handleData}
             value={data.password}
           />
+          {data.password !== confirmPass && (
+            <p className="text-red-500">Password does not match with confirm password.</p>
+          )}
         </div>
         <div className="mb-6">
           <label
@@ -146,9 +151,7 @@ const Register = () => {
             onChange={(e) => setConfirmPass(e.target.value)}
             value={confirmPass}
           />
-          {data.password !== confirmPass && (
-            <p className="text-red-500">Password does not match!</p>
-          )}
+          
         </div>
 
         <button
