@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,39 +20,37 @@ const Register = () => {
     setData((pre) => ({ ...pre, [name]: value }));
   };
 
-  const submit =async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     if (data.password !== confirmPass) {
       return;
     }
-    
+
     try {
-      setErrors({})
-      const sendingRequest =await fetch('http://localhost:3000/api/register',{
-        method:"POST",
-        headers:{
-          'Content-Type':'application/json'
+      setErrors({});
+      const sendingRequest = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify(data),
+        body: JSON.stringify(data),
       });
 
       const res = await sendingRequest.json();
       console.log(res);
 
       if (!sendingRequest.ok) {
-        setErrors(res.errors)
-        console.log(res.errors)
+        setErrors(res.errors);
+        console.log(res.errors);
         // toast.error("Something please try again")
         return;
       }
 
-      toast.success(res.msg)
-      navigate('/login')
-
+      toast.success(res.msg);
+      navigate("/login");
     } catch (error) {
-      console.log(`ERROR : ${error}`)
+      console.log(`ERROR : ${error}`);
     }
-    
   };
 
   return (
@@ -62,107 +60,61 @@ const Register = () => {
       </h5>
       <form onSubmit={submit}>
         <div className="grid gap-6 mb-6 md:grid-cols-2">
-          <div>
-            <label
-              htmlFor="first_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              First name
-            </label>
-            <input
-              type="text"
-              id="first_name"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="John"
-              required=""
-              name="fname"
-              onChange={handleData}
-              value={data.fname}
-            />
-            {errors.fname && <p className="text-red-500">{errors.fname._errors[0]}</p>}
-          </div>
-          <div>
-            <label
-              htmlFor="last_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Last name
-            </label>
-            <input
-              type="text"
-              id="last_name"
-              name="lname"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Doe"
-              required=""
-              onChange={handleData}
-              value={data.lname}
-            />
-            {errors.lname && <p className="text-red-500">{errors.lname._errors[0]}</p>}
-
-          </div>
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Email address
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="john.doe@company.com"
-            required=""
-            name="email"
-            onChange={handleData}
-            value={data.email}
+          <TextInput
+            label="First Name"
+            error={errors.fname}
+            name="fname"
+            onChanage={handleData}
+            placeholder="John"
+            required={true}
+            type="text"
+            value={data.fname}
           />
-            {errors.email && <p className="text-red-500">{errors.email._errors[0]}</p>}
-
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="•••••••••"
-            required=""
-            name="password"
-            onChange={handleData}
-            value={data.password}
+          <TextInput
+            label="Last Name"
+            error={errors.lname}
+            name="lname"
+            onChanage={handleData}
+            placeholder="doe"
+            required={true}
+            type="text"
+            value={data.lname}
           />
-            {errors.password && <p className="text-red-500">{errors.password._errors[0]}</p>}
-
-          {data.password !== confirmPass && (
-            <p className="text-red-500">Password does not match with confirm password.</p>
-          )}
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor="confirm_password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Confirm password
-          </label>
-          <input
-            type="password"
-            id="confirm_password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="•••••••••"
-            required=""
-            onChange={(e) => setConfirmPass(e.target.value)}
-            value={confirmPass}
-          />
-          
-        </div>
+        <TextInput
+          label="Email address"
+          error={errors.email}
+          name="email"
+          onChanage={handleData}
+          placeholder="john.doe@company.com"
+          required={true}
+          type="email"
+          value={data.email}
+        />
+        <TextInput
+          label="Password"
+          error={errors.password}
+          name="password"
+          onChanage={handleData}
+          placeholder="•••••••••"
+          required={true}
+          type="password"
+          value={data.password}
+        />
+        {data.password !== confirmPass && (
+          <p className="text-red-500">
+            Password does not match with confirm password.
+          </p>
+        )}
+        <TextInput
+          label="Confirm password"
+          name="confirm_password"
+          onChanage={(e) => setConfirmPass(e.target.value)}
+          placeholder="•••••••••"
+          required={true}
+          type="password"
+          value={confirmPass}
+        />
 
         <button
           type="submit"

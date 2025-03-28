@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { TextInput } from "./Form/TextInput";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Login = () => {
     setError({})
     e.preventDefault();
 
-    console.log(data)
+    console.log(data);
     try {
       const sending = await fetch("http://localhost:3000/api/login-check", {
         method: "POST",
@@ -36,7 +37,7 @@ const Login = () => {
       console.log(res);
 
       if (!sending.ok) {
-        setError(res.errors)
+        setError(res.errors);
         toast.error(res.error);
         return;
       }
@@ -54,44 +55,26 @@ const Login = () => {
         Login
       </h5>
       <form onSubmit={handelForm}>
-        <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Email address
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="john.doe@company.com"
-            required=""
-            name="email"
-            value={data.email}
-            onChange={handelData}
-          />
-           {error.email && <p className="text-red-500">{error.email._errors[0]}</p>}
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="•••••••••"
-            required=""
-            name="password"
-            value={data.password}
-            onChange={handelData}
-          />
-           {error.password && <p className="text-red-500">{error.password._errors[0]}</p>}
-        </div>
+        <TextInput
+          label=" Email address"
+          error={error.email}
+          name="email"
+          onChanage={handelData}
+          placeholder="john.doe@company.com"
+          required={false}
+          type="email"
+          value={data.email}
+        />
+        <TextInput
+          label="Password"
+          error={error.password}
+          name="password"
+          onChanage={handelData}
+          placeholder="•••••••••"
+          required={false}
+          type="password"
+          value={data.password}
+        />
 
         <button
           type="submit"
