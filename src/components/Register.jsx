@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { TextInput } from "./Form/TextInput";
 
 const Register = () => {
   const navigate = useNavigate();
