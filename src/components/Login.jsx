@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const [error, setError] = useState({})
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -17,7 +17,9 @@ const Login = () => {
     setData((pre) => ({ ...pre, [name]: value }));
   };
   const handelForm = async (e) => {
+    setError({})
     e.preventDefault();
+
     console.log(data)
     try {
       const sending = await fetch("http://localhost:3000/api/login-check", {
@@ -34,6 +36,7 @@ const Login = () => {
       console.log(res);
 
       if (!sending.ok) {
+        setError(res.errors)
         toast.error(res.error);
         return;
       }
@@ -68,6 +71,7 @@ const Login = () => {
             value={data.email}
             onChange={handelData}
           />
+           {error.email && <p className="text-red-500">{error.email._errors[0]}</p>}
         </div>
         <div className="mb-6">
           <label
@@ -83,9 +87,10 @@ const Login = () => {
             placeholder="•••••••••"
             required=""
             name="password"
-            value={data.passwrd}
+            value={data.password}
             onChange={handelData}
           />
+           {error.password && <p className="text-red-500">{error.password._errors[0]}</p>}
         </div>
 
         <button

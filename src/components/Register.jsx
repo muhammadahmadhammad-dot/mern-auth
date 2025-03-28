@@ -5,6 +5,7 @@ import {toast} from "react-toastify"
 const Register = () => {
   const navigate = useNavigate();
   const [confirmPass, setConfirmPass] = useState("");
+  const [errors, setErrors] = useState({});
   const [data, setData] = useState({
     fname: "",
     lname: "",
@@ -21,12 +22,12 @@ const Register = () => {
 
   const submit =async (e) => {
     e.preventDefault();
-
     if (data.password !== confirmPass) {
       return;
     }
-
+    
     try {
+      setErrors({})
       const sendingRequest =await fetch('http://localhost:3000/api/register',{
         method:"POST",
         headers:{
@@ -39,11 +40,13 @@ const Register = () => {
       console.log(res);
 
       if (!sendingRequest.ok) {
-        toast.error("Something please try again")
+        setErrors(res.errors)
+        console.log(res.errors)
+        // toast.error("Something please try again")
         return;
       }
 
-      toast.success('Register Successfully.')
+      toast.success(res.msg)
       navigate('/login')
 
     } catch (error) {
@@ -76,6 +79,7 @@ const Register = () => {
               onChange={handleData}
               value={data.fname}
             />
+            {errors.fname && <p className="text-red-500">{errors.fname._errors[0]}</p>}
           </div>
           <div>
             <label
@@ -94,6 +98,8 @@ const Register = () => {
               onChange={handleData}
               value={data.lname}
             />
+            {errors.lname && <p className="text-red-500">{errors.lname._errors[0]}</p>}
+
           </div>
         </div>
         <div className="mb-6">
@@ -113,6 +119,8 @@ const Register = () => {
             onChange={handleData}
             value={data.email}
           />
+            {errors.email && <p className="text-red-500">{errors.email._errors[0]}</p>}
+
         </div>
         <div className="mb-6">
           <label
@@ -131,6 +139,8 @@ const Register = () => {
             onChange={handleData}
             value={data.password}
           />
+            {errors.password && <p className="text-red-500">{errors.password._errors[0]}</p>}
+
           {data.password !== confirmPass && (
             <p className="text-red-500">Password does not match with confirm password.</p>
           )}
