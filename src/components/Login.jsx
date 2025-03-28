@@ -5,7 +5,12 @@ import { TextInput } from "./Form/TextInput";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState({})
+  const initialErrors = {
+    email: "",
+    password: "",
+  };
+
+  const [error, setError] = useState(initialErrors)
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -18,7 +23,7 @@ const Login = () => {
     setData((pre) => ({ ...pre, [name]: value }));
   };
   const handelForm = async (e) => {
-    setError({})
+    setError(initialErrors)
     e.preventDefault();
 
     console.log(data);
@@ -37,7 +42,7 @@ const Login = () => {
       console.log(res);
 
       if (!sending.ok) {
-        setError(res.errors);
+        setError(res.errors || initialErrors);
         toast.error(res.error);
         return;
       }

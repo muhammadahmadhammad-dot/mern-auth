@@ -5,7 +5,11 @@ import { toast } from "react-toastify";
 const Register = () => {
   const navigate = useNavigate();
   const [confirmPass, setConfirmPass] = useState("");
-  const [errors, setErrors] = useState({});
+  const initialErrors = {
+    email: "",
+    password: "",
+  };
+  const [errors, setErrors] = useState(initialErrors);
   const [data, setData] = useState({
     fname: "",
     lname: "",
@@ -27,7 +31,7 @@ const Register = () => {
     }
 
     try {
-      setErrors({});
+      setErrors(initialErrors);
       const sendingRequest = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: {
@@ -40,7 +44,7 @@ const Register = () => {
       console.log(res);
 
       if (!sendingRequest.ok) {
-        setErrors(res.errors);
+        setErrors(res.errors || initialErrors);
         console.log(res.errors);
         // toast.error("Something please try again")
         return;
