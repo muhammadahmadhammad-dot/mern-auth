@@ -8,12 +8,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router";
-import Login from "./components/Login.jsx";
-import Register from "./components/Register.jsx";
-import Layout from "./Layout.jsx";
 import { ToastContainer } from "react-toastify";
-import Profile from "./components/Profile.jsx";
-
+import {Profile, Layout, Register, Login} from "./components"
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>

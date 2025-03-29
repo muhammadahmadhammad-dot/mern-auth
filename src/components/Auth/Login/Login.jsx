@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { TextInput } from "./Form/TextInput";
+import { TextInput } from "./../TextInput";
 
 const Login = () => {
   const navigate = useNavigate();
